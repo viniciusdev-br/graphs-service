@@ -1,7 +1,9 @@
 from pydantic import BaseModel
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from typing import List
+
+from models.graphs import Graph
+
 
 app = FastAPI()
 
@@ -17,18 +19,6 @@ app.add_middleware(
 def HomePage():
     return {"Hello": "World"}
 
-class Components(BaseModel):
-    start : str
-    end : str
-    weight : int
-
-class Graph(BaseModel):
-    oriented : bool
-    weighted : bool
-    size : int
-    selected_vertex : str
-    selected_vertex2 : str
-    edges : list[Components]
     
 @app.post("/teste")
 def Soma(obj : Graph):

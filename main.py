@@ -1,10 +1,12 @@
 from pydantic import BaseModel
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-from models.graphs import Graph
+from fastapi.responses import Response
+from base64 import b64encode
+from models.graphs import Graph, RenderGraph
 from modules.adjacencia import AdjacencyList
 from modules.matriz import Matriz
+from modules.render_graph import GraphGenerator
 
 app = FastAPI()
 
@@ -24,6 +26,12 @@ def HomePage():
 def HealthCheck():
     return {"status": "OK"}
 
+@app.post("/rendergraph")
+def RenderGraph(graph: RenderGraph):
+    graph_generator = GraphGenerator()
+    image_bytes = graph_generator.render_graph(graph)
+    encoded_image = b64encode(image_bytes)
+    return { "data": encoded_image }
     
 @app.post("/teste")
 def Soma(obj : Graph):

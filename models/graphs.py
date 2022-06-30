@@ -10,3 +10,7 @@ class Graph(BaseModel):
     selected_vertex : str
     selected_vertex2 : str
     edges : List[Edges]
+
+class RenderGraph(BaseModel):
+    oriented : bool
+    edges: List[Edges]

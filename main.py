@@ -30,6 +30,7 @@ def Soma(obj : Graph):
 
     json_edjes = obj.edges
     matriz = Matriz(obj.size)
+    
     # ----------------- Monta a matriz de adjacência -------------------
     for i in json_edjes:
         if (i.end == "None"):

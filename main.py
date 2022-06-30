@@ -32,11 +32,12 @@ def Soma(obj : Graph):
     matriz = Matriz(obj.size)
     
     # ----------------- Monta a matriz de adjacência -------------------
-    for i in json_edjes:
-        if (i.end == "None"):
-            print('Sem aresta a adicionar.')
-        else:
-            matriz.add_edge(i.start,i.end, obj.oriented, obj.weighted, i.weight)
+    if (obj.weighted == False):
+        for i in json_edjes:
+            if (i.end == "None"):
+                print('Sem aresta a adicionar.')
+            else:
+                matriz.add_edge(i.start,i.end, obj.oriented)
 
     requisito = obj.requirement
 
@@ -61,11 +62,20 @@ def Soma(obj : Graph):
             for i in obj.edges:
                 if i.start == obj.selected_vertex and i.end == obj.selected_vertex2 or i.start == obj.selected_vertex2 and i.end == obj.selected_vertex:
                     test = True
-        return {"result": test}
+        if (test):
+            return { "result" : "A aresta existe" }
+        else:
+            return { "result" : "A aresta não existe" }
 
     if ( requisito == 2):
-        matriz.print_matrix()
-        return {"result" : matriz.grau_edge(obj.oriented, obj.selected_vertex)}
+        #matriz.print_matrix()
+        # retorna o grau de um vértice em grafos orientados, e uma lista [número de emissão e recepção] em dígrafos
+        # return {"result" : matriz.grau_edge(obj.oriented, obj.selected_vertex)}
+        if obj.oriented == True:
+            return #{"result":}
+        else:
+            return #{"result":}
+    
 
     if ( requisito == 3 ):
         # Caso o grafo seja orientado será retornado um vetor, o primeiro elemento são os seus sucessores, o segundo é o seu antecessor
@@ -80,15 +90,22 @@ def Soma(obj : Graph):
             for j in range(obj.size):
                 if (adjacencia_lista.isReachable(i, j) and i != j):
                     matriz.adjMatrix[i][j] = 1
-        return { "result": matriz.RF005()}
 
+        if (matriz.RF005()):
+            return { "result" : 'Grafo fracamente conexo' }
+        else:
+            return { "result" : "Grafo não é fracamente conexo" }
+    
     if (requisito == 6 ):
         maiorCaminho = 1
         for i in range(obj.size):
             for j in range(obj.size):
                 if (adjacencia_lista.isReachable(i, j) and i != j):
                     matriz.adjMatrix[i][j] = 1
-        return { "result": matriz.RF006()}
+        if (matriz.RF006()):
+            return { "result" : 'Grafo unilateralmente conexo' }
+        else:
+            return { "result" : "Grafo não é unilateralmente conexo" }
 
     if (requisito == 7):
         maiorCaminho = 1
@@ -98,6 +115,7 @@ def Soma(obj : Graph):
                     matriz.adjMatrix[i][j] = 1
         adjacencia_lista.printSCCs()
         return { "result": matriz.RF007()}
+        
 
     if ( requisito == 8 ):
         print(adjacencia_lista._data)
@@ -117,7 +135,7 @@ def Soma(obj : Graph):
         grafo_planar = []
         for i in json_edjes:
             if (i.start == "None"):
-                print('Sem aresta a adicionar.')
+                return { 'result' : 'Sem aresta a adicionar' }
             else:
                 grafo_planar.append(( ord(i.start) - 65, ord(i.end) - 65 ))
 
@@ -125,9 +143,9 @@ def Soma(obj : Graph):
         k33 = [(0,1),(0,3),(0,5),(1,2),(1,4),(2,3),(2,5),(3,4),(4,5)]
 
         if (matriz.solve(grafo_planar, k5, matriz.size, 5) == False & matriz.solve(grafo_planar, k33, matriz.size, 5) == False):
-            print('É planar.')
+            return { 'result' : 'É planar'}
         else:
-            print('Não é planar.')
+            return { 'result' : 'Não é planar' }
 
         print('2-conexo: ', adjacencia_lista.isBC())
 
@@ -135,15 +153,5 @@ def Soma(obj : Graph):
             print('Euleriano')
             print('Caminho: ', matriz.pathEuler(len(json_edjes)))
         else: 
-            print('Não euleriano')
-
-    if ( requisito == 11):
-        RF11 = Matriz(obj.size)
-    # ----------------- Monta a matriz de adjacência -------------------
-        for i in json_edjes:
-            if (i.end == "None"):
-                print('Sem aresta a adicionar.')
-            else:
-                RF11.add_edge(i.start,i.end, obj.oriented, obj.weighted, i.weight)
-        RF11.print_matrix()
+            return { 'result' : 'Não euleriano' }
         

@@ -104,3 +104,27 @@ def Soma(obj : Graph):
         for i in lista:
             tratado.append(chr(i + 65))
         return { 'result' : tratado}
+
+    if ( requisito == 10 ):
+        grafo_planar = []
+        for i in json_edjes:
+            if (i.start == "None"):
+                print('Sem aresta a adicionar.')
+            else:
+                grafo_planar.append(( ord(i.start) - 65, ord(i.end) - 65 ))
+
+        k5 = [(0, 1), (0, 2), (0, 3), (0, 4), (1, 2), (1, 3), (1, 4), (2, 3), (2, 4), (3, 4)]
+        k33 = [(0,1),(0,3),(0,5),(1,2),(1,4),(2,3),(2,5),(3,4),(4,5)]
+
+        if (matriz.solve(grafo_planar, k5, matriz.size, 5) == False & matriz.solve(grafo_planar, k33, matriz.size, 5) == False):
+            print('É planar.')
+        else:
+            print('Não é planar.')
+
+        print('2-conexo: ', adjacencia_lista.isBC())
+
+        if (matriz.grauPar()):
+            print('Euleriano')
+            print('Caminho: ', matriz.pathEuler(len(json_edjes)))
+        else: 
+            print('Não euleriano')

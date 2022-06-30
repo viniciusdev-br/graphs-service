@@ -20,6 +20,10 @@ app.add_middleware(
 def HomePage():
     return {"Hello": "World"}
 
+@app.get("/healthcheck")
+def HealthCheck():
+    return {"status": "OK"}
+
     
 @app.post("/teste")
 def Soma(obj : Graph):

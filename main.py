@@ -40,6 +40,17 @@ def Soma(obj : Graph):
 
     requisito = obj.requirement
 
+    # ------------------ Monta a lista de adjacência -------------------
+
+    adjacencia_lista = AdjacencyList(obj.size)
+    for i in json_edjes:
+        if (i.start == "None"):
+            print('Sem aresta a adicionar.')
+        else:
+            adjacencia_lista.conectar(ord(i.start) - 65,ord(i.end) -65)
+
+# _________________________________________________________________
+
     if ( requisito == 1):
         test = False
         if obj.oriented == True:
@@ -62,3 +73,11 @@ def Soma(obj : Graph):
 
     if ( requisito == 4 ):
         return { "result": matriz.is_scrappy(obj) }
+
+    if ( requisito == 5 ):
+        maiorCaminho = 1
+        for i in range(obj.size):
+            for j in range(obj.size):
+                if (adjacencia_lista.isReachable(i, j) and i != j):
+                    matriz.adjMatrix[i][j] = 1
+        return { "result": matriz.RF005()}

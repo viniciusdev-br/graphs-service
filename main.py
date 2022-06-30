@@ -120,7 +120,11 @@ def Soma(obj : Graph):
             for j in range(obj.size):
                 if (adjacencia_lista.isReachable(i, j) and i != j):
                     matriz.adjMatrix[i][j] = 1
-        return { "result": matriz.RF005()}
+
+        if (matriz.RF005()):
+            return { "result" : 'Grafo fracamente conexo' }
+        else:
+            return { "result" : "Grafo não é fracamente conexo" }
 
     if (requisito == 6 ):
         maiorCaminho = 1

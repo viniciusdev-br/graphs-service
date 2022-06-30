@@ -54,5 +54,7 @@ def Soma(obj : Graph):
 
     if ( requisito == 2):
         matriz.print_matrix()
-        return matriz.grau_edge(obj.oriented, obj.selected_vertex)
-        
+        return {"result" : matriz.grau_edge(obj.oriented, obj.selected_vertex)}
+
+    if ( requisito == 3 ):
+        return {"result" : matriz.adjacencia_vertex(obj.oriented, obj.selected_vertex)}

@@ -8,7 +8,7 @@ class AdjacencyList(object):
         self._data = defaultdict(list)
         self.size = size
         self.Time = 0
-        self.Fortes = []
+        self.Fortes = ''
 
     def conectar(self, nodo_origem, nodo_destino):
         self._data[nodo_origem].append(nodo_destino)
@@ -18,7 +18,7 @@ class AdjacencyList(object):
 
     def DFSUtil(self,v,visited):
         visited[v]= True
-        self.Fortes.append(chr(v + 65))
+        self.Fortes += chr(v + 65)
         print(chr(v + 65))
         for i in self._data[v]:
             if visited[i]==False:
@@ -51,6 +51,8 @@ class AdjacencyList(object):
             if visited[i]==False:
                 gr.DFSUtil(i, visited)
                 print("")
+                self.Fortes += "\n"
+        return 'OI'
 
     def vizinhos(self, nodo):
         return self._data[nodo]

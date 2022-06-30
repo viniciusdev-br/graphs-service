@@ -81,3 +81,26 @@ def Soma(obj : Graph):
                 if (adjacencia_lista.isReachable(i, j) and i != j):
                     matriz.adjMatrix[i][j] = 1
         return { "result": matriz.RF005()}
+
+    if (requisito == 7):
+        maiorCaminho = 1
+        for i in range(obj.size):
+            for j in range(obj.size):
+                if (adjacencia_lista.isReachable(i, j) and i != j):
+                    matriz.adjMatrix[i][j] = 1
+        adjacencia_lista.printSCCs()
+        return { "result": matriz.RF007()}
+
+    if ( requisito == 8 ):
+        print(adjacencia_lista._data)
+        if adjacencia_lista.tem_ciclo():
+            return { 'result' : 'Encontrou um ciclo'}
+        else:
+            return { 'result' : 'Não encontrou um ciclo'}
+
+    if ( requisito == 9 ):
+        lista = adjacencia_lista.ordenacao_topologica()
+        tratado = []
+        for i in lista:
+            tratado.append(chr(i + 65))
+        return { 'result' : tratado}

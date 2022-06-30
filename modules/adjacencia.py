@@ -8,6 +8,7 @@ class AdjacencyList(object):
         self._data = defaultdict(list)
         self.size = size
         self.Time = 0
+        self.Fortes = []
 
     def conectar(self, nodo_origem, nodo_destino):
         self._data[nodo_origem].append(nodo_destino)
@@ -17,6 +18,7 @@ class AdjacencyList(object):
 
     def DFSUtil(self,v,visited):
         visited[v]= True
+        self.Fortes.append(chr(v + 65))
         print(chr(v + 65))
         for i in self._data[v]:
             if visited[i]==False:
@@ -119,10 +121,38 @@ class AdjacencyList(object):
 
         return False  
 
+    def tem_ciclo(self):
+        # Lista dos tempos de descoberta de cada vértice
+        d = [-1] * self.size
+        # Lista dos tempos de finalização de cada vértice
+        f = [-1] * self.size
+
+        for vertice in range(self.size):
+            if d[vertice] == -1:  # se o vértice ainda não foi visitado
+                if self.tem_arco_de_retorno(vertice, d, f):
+                    return True
+        return False
+
+    def tem_arco_de_retorno(self, u, d, f):
+        d[u] = self.Time
+        self.Time += 1
+
+        for w in self._data[u]:
+            if d[w] == -1:
+                if self.tem_arco_de_retorno(w, d, f):
+                    return True
+            elif f[w] == -1:
+                return True
+
+        f[u] = self.Time
+        self.Time += 1
+        return False
+
     def verificar_ciclos(self, nodo_inicial):
         nodos_visitados = set()
         nodos_restantes = [nodo_inicial]
         while nodos_restantes:
+            print('pláaaaaaa')
             nodo_atual = nodos_restantes.pop()
             nodos_visitados.add(nodo_atual)
             for vizinho in self.vizinhos(nodo_atual):
@@ -130,6 +160,33 @@ class AdjacencyList(object):
                     return True
                 nodos_restantes.append(vizinho)
         return False
+
+    def visita(self, vertice, d, f, ordem_topologica):
+        d[vertice] = self.Time
+        self.Time += 1
+
+        for w in self._data[vertice]:
+            if d[w] == -1:
+                self.visita(w, d, f, ordem_topologica)
+
+        f[vertice] = self.Time
+        self.Time += 1
+        ordem_topologica.append(vertice)
+
+    def ordenacao_topologica(self):
+        if self.tem_ciclo():  # Se o grafo contém ciclo, nenhuma ordenação topológica é possivel
+            return []
+
+        d = [-1] * self.size  # Tempo de descoberta
+        f = [-1] * self.size  # Tempo de finalização
+        ordem_topologica = []
+        self.Time = 0
+
+        for vertice in range(self.size):
+            if d[vertice] == -1:  # se o vértice ainda não foi visitado
+                self.visita(vertice, d, f, ordem_topologica)
+
+        return list(reversed(ordem_topologica))
 
     def RF012(self,graph): # gera uma árvore geradora mínima (incompleto)
         AGM = AdjacencyList(graph["size"])

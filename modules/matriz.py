@@ -37,6 +37,7 @@ class Matriz(object):
         return True
 
     def pathEuler(self, numAres):
+        grafo = self.size
         noInicial = 0
         print(numAres)
         path = []
@@ -60,7 +61,7 @@ class Matriz(object):
                 return path
 
             while(True):
-                aux = random.randint(0, len(grafo)-1)
+                aux = random.randint(0, grafo-1)
                 if (aux not in visitados):
                     noInicial = aux
                     break;

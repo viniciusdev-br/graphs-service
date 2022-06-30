@@ -172,6 +172,7 @@ def Soma(obj : Graph):
         return {"result": output}
 
     if ( requisito == 10 ):
+        output = ''
         grafo_planar = []
         for i in json_edjes:
             if (i.start == "None"):
@@ -184,16 +185,29 @@ def Soma(obj : Graph):
 
         if (matriz.solve(grafo_planar, k5, matriz.size, 5) == False & matriz.solve(grafo_planar, k33, matriz.size, 5) == False):
             print('É planar.')
+            output += "É planar\n"
         else:
             print('Não é planar.')
+            output += "Não é planar.\n"
 
         print('2-conexo: ', adjacencia_lista.isBC())
+        output = '2-conexo: '
+        if (adjacencia_lista.isBC()):
+            output += 'Sim \n'
+        else:
+            output += 'Não \n'
 
+        output += 'Euleriano: '
         if (matriz.grauPar()):
             print('Euleriano')
+            output += 'Sim, no caminho: '
+            output += str(matriz.pathEuler(len(json_edjes)))
             print('Caminho: ', matriz.pathEuler(len(json_edjes)))
         else: 
+            output += 'Não euleriano'
             print('Não euleriano')
+
+        return {'result': output}
 
     if ( requisito == 11):
         RF11 = Matriz(obj.size)

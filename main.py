@@ -31,12 +31,11 @@ def Soma(obj : Graph):
     json_edjes = obj.edges
     matriz = Matriz(obj.size)
     # ----------------- Monta a matriz de adjacência -------------------
-    if (obj.weighted == False):
-        for i in json_edjes:
-            if (i.end == "None"):
-                print('Sem aresta a adicionar.')
-            else:
-                matriz.add_edge(i.start,i.end, obj.oriented)
+    for i in json_edjes:
+        if (i.end == "None"):
+            print('Sem aresta a adicionar.')
+        else:
+            matriz.add_edge(i.start,i.end, obj.oriented, obj.weighted, i.weight)
 
     requisito = obj.requirement
 
@@ -81,6 +80,14 @@ def Soma(obj : Graph):
                 if (adjacencia_lista.isReachable(i, j) and i != j):
                     matriz.adjMatrix[i][j] = 1
         return { "result": matriz.RF005()}
+
+    if (requisito == 6 ):
+        maiorCaminho = 1
+        for i in range(obj.size):
+            for j in range(obj.size):
+                if (adjacencia_lista.isReachable(i, j) and i != j):
+                    matriz.adjMatrix[i][j] = 1
+        return { "result": matriz.RF006()}
 
     if (requisito == 7):
         maiorCaminho = 1
@@ -128,3 +135,14 @@ def Soma(obj : Graph):
             print('Caminho: ', matriz.pathEuler(len(json_edjes)))
         else: 
             print('Não euleriano')
+
+    if ( requisito == 11):
+        RF11 = Matriz(obj.size)
+    # ----------------- Monta a matriz de adjacência -------------------
+        for i in json_edjes:
+            if (i.end == "None"):
+                print('Sem aresta a adicionar.')
+            else:
+                RF11.add_edge(i.start,i.end, obj.oriented, obj.weighted, i.weight)
+        RF11.print_matrix()
+        

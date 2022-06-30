@@ -1,5 +1,6 @@
 from itertools import product
 from collections import defaultdict
+from queue import PriorityQueue
 import numpy as np
 import random
 
@@ -11,13 +12,21 @@ class Matriz(object):
         for i in range(size):
             self.adjMatrix.append([0 for i in range(size)])
         self.size = size
+        self.Visited = []
 
-    def add_edge(self, v1, v2, oriented):
-        if (oriented):
-            self.adjMatrix[ord(v1) - 65][ord(v2) - 65] = 1
-        else:
-            self.adjMatrix[ord(v1) - 65][ord(v2) - 65] = 1
-            self.adjMatrix[ord(v2) - 65][ord(v1) - 65] = 1
+    def add_edge(self, v1, v2, oriented, weighted, weight):
+        if (weighted):
+            if (oriented):
+                self.adjMatrix[ord(v1) - 65][ord(v2) - 65] = weight
+            else:
+                self.adjMatrix[ord(v1) - 65][ord(v2) - 65] = weight
+                self.adjMatrix[ord(v2) - 65][ord(v1) - 65] = weight
+        else: 
+            if (oriented):
+                self.adjMatrix[ord(v1) - 65][ord(v2) - 65] = 1
+            else:
+                self.adjMatrix[ord(v1) - 65][ord(v2) - 65] = 1
+                self.adjMatrix[ord(v2) - 65][ord(v1) - 65] = 1
 
     def grauPar(self):
         graus = np.sum(self.adjMatrix, axis=1)
@@ -81,26 +90,38 @@ class Matriz(object):
             return False
 
         
-    def RF006(self): # teste de unilateralmente conexo
-        order = self.size
-        duplas = 0
-        teste = order -1
-        conections = 0
-
-        line = 0
-        for i in self.adjMatrix:
-            column = 0
-            for j in i:
-                if j == 1 and line != column:
-                    conections += 1
-                column += 1
-            line += 1
-
-        while teste > 0:
-            duplas += teste
-            teste -= 1
-
-        if duplas == conections:
+    def RF006(self):
+        graph = self.adjMatrix
+        n = self.size
+        strongly = True;
+        for i in range(n):
+            for j in range(n):
+                if (graph[i][j] != graph[j][i]):
+                    strongly = False;
+                    break
+            if not strongly:
+                break;
+        if (strongly):
+            return False
+        uppertri = True;
+        for i in range(n):
+            for j in range(n):
+                if (i > j and graph[i][j] == 0):
+                    uppertri = False;
+                    break;            
+            if not uppertri:
+                break;
+        if uppertri:
+            return True
+        lowertri = True;
+        for i in range(n):
+            for j in range(n):
+                if (i < j and graph[i][j] == 0):
+                    lowertri = False;
+                    break;
+            if not lowertri:
+                break;        
+        if lowertri:
             return True
         else:
             return False
@@ -133,6 +154,7 @@ class Matriz(object):
             for val in row:
                 print('{:4}'.format(val), end=""),
             print('\n')
+
     def existe_edge(self):
       for row in self.adjMatrix:
             for val in row:
@@ -191,6 +213,29 @@ class Matriz(object):
                 if (self.adjMatrix[ord(vertex) - 65][i] != 0):
                     digrafo.append(chr(i + 65))
             return digrafo 
+
+    def dijkstra(self, start_vertex):
+        graph = self.adjMatrix
+        D = {v:float('inf') for v in range(graph.v)}
+        D[start_vertex] = 0
+
+        pq = PriorityQueue()
+        pq.put((0, start_vertex))
+
+        while not pq.empty():
+            (dist, current_vertex) = pq.get()
+            graph.visited.append(current_vertex)
+
+            for neighbor in range(graph.v):
+                if self.adjMatrix[current_vertex][neighbor] != -1:
+                    distance = self.adjMatrix[current_vertex][neighbor]
+                    if neighbor not in graph.visited:
+                        old_cost = D[neighbor]
+                        new_cost = D[current_vertex] + distance
+                        if new_cost < old_cost:
+                            pq.put((new_cost, neighbor))
+                            D[neighbor] = new_cost
+        return D
 
     def is_scrappy(self, obj):
         vertices = []

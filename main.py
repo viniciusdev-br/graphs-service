@@ -28,6 +28,16 @@ def HealthCheck():
 @app.post("/teste")
 def Soma(obj : Graph):
 
+    json_edjes = obj.edges
+    matriz = Matriz(obj.size)
+    # ----------------- Monta a matriz de adjacência -------------------
+    if (obj.weighted == False):
+        for i in json_edjes:
+            if (i.start == None):
+                print('Sem aresta a adicionar.')
+            else:
+                matriz.add_edge(i.start,i.end, obj.oriented)
+
     requisito = obj.requirement
 
     if ( requisito == 1):
@@ -42,5 +52,7 @@ def Soma(obj : Graph):
                     test = True
         return {"result": test}
 
-    return {"result" : obj.edges, "status" : True}
+    if ( requisito == 2):
+        matriz.print_matrix()
+        return matriz.grau_edge(obj.oriented, obj.selected_vertex)
         

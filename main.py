@@ -55,7 +55,7 @@ def Soma(obj : Graph):
     if ( requisito == 1):
         test = False
         if obj.oriented == True:
-            for i in graph.edges:
+            for i in obj.edges:
                 if i.start == start and i.end == end:
                     test = True
         else:
@@ -71,18 +71,50 @@ def Soma(obj : Graph):
         #matriz.print_matrix()
         # retorna o grau de um vértice em grafos orientados, e uma lista [número de emissão e recepção] em dígrafos
         # return {"result" : matriz.grau_edge(obj.oriented, obj.selected_vertex)}
+        output = ""
+        res = matriz.grau_edge(obj.oriented, obj.selected_vertex)
         if obj.oriented == True:
-            return #{"result":}
+            output += "número de emissão: "
+            output += res[0]
+            output += "\n"
+            output += "número de recepção: "
+            output += res[1]
+            return {"result": output}
         else:
-            return #{"result":}
+            output += "grau do vértice: "
+            output += res
+            return {"result": output}
     
 
     if ( requisito == 3 ):
         # Caso o grafo seja orientado será retornado um vetor, o primeiro elemento são os seus sucessores, o segundo é o seu antecessor
         return {"result" : matriz.adjacencia_vertex(obj.oriented, obj.selected_vertex)}
+        output = ""
+        res = matriz.adjacencia_vertex(obj.oriented, obj.selected_vertex)
+        if obj.oriented == True:
+            output += "sucessores: "
+            for i in res[0]:
+                output += i
+                output += " "
+            output += "\n"
+            output += "antecessores: "
+            for i in res[1]:
+                output += i
+                output += " "
+            return {"result":output}
+        else:
+            output += "grafos adjacentes: "
+            for i in res:
+                output += i
+                output += " "
+            return {"result":output}
 
     if ( requisito == 4 ):
-        return { "result": matriz.is_scrappy(obj) }
+        #return { "result": matriz.is_scrappy(obj) }
+        if matriz.is_scrappy(obj) == True:
+            return {"result":"Grafo é conexo"}
+        else:
+            return {"result":"Grafo não é conexo"}
 
     if ( requisito == 5 ):
         maiorCaminho = 1
@@ -113,8 +145,13 @@ def Soma(obj : Graph):
             for j in range(obj.size):
                 if (adjacencia_lista.isReachable(i, j) and i != j):
                     matriz.adjMatrix[i][j] = 1
-        adjacencia_lista.printSCCs()
-        return { "result": matriz.RF007()}
+        #adjacencia_lista.printSCCs()
+        #return { "result": matriz.RF007()}
+        if matriz.RF007() == False:
+            return {"result": "Não é fortemente conexo"}
+        else:
+            adjacencia_lista.printSCCs()
+            
         
 
     if ( requisito == 8 ):
@@ -154,4 +191,3 @@ def Soma(obj : Graph):
             print('Caminho: ', matriz.pathEuler(len(json_edjes)))
         else: 
             return { 'result' : 'Não euleriano' }
-        

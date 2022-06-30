@@ -192,29 +192,32 @@ class Matriz(object):
                     digrafo.append(chr(i + 65))
             return digrafo 
 
-    def is_scrappy(self, pseudoMatriz=None):
-        if (pseudoMatriz == None):
-            count = 0
-            for row in self.adjMatrix:
-                for val in row:
-                    if (val == 0):
-                        count += 1
-                    if (count == self.size):
-                        return True
-                    else: 
-                        count = 0
-            if (count == 0):
-                return False
+    def is_scrappy(self, obj):
+        vertices = []
+        conected = []
+        for i in obj.edges:
+            if i.start not in vertices and i.start != "None":
+                vertices.append(i.start)
+            if i.end not in vertices and i.end != "None":
+                vertices.append(i.end)
+
+        for i in vertices:
+            for j in obj.edges:
+                if j.start  == i and j.end  != "None" and j.end  != i:
+                    conected.append(j.start ) if j.start  not in conected else "None"
+                    conected.append(j.end ) if j.end  not in conected else "None"
+                    continue
+                elif j.end  == i and j.start  != "None" and j.start  != i:
+                    conected.append(j.start ) if j.start  not in conected else "None"
+                    conected.append(j.end ) if j.end  not in conected else "None"
+                    continue
+
+        for i in conected:
+            vertices.remove(i)
+        if len(vertices) == 0:
+            #return None
+            return True
         else:
-            count = 0
-            for row in pseudoMatriz:
-                for val in row:
-                    if (val == 0):
-                        count += 1
-                    if (count == self.size):
-                        return True
-                    else: 
-                        count = 0
-            if (count == 0):
-                return False 
+            #return vertices
+            return False
         

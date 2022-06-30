@@ -33,7 +33,7 @@ def Soma(obj : Graph):
     # ----------------- Monta a matriz de adjacência -------------------
     if (obj.weighted == False):
         for i in json_edjes:
-            if (i.start == None):
+            if (i.end == "None"):
                 print('Sem aresta a adicionar.')
             else:
                 matriz.add_edge(i.start,i.end, obj.oriented)
@@ -57,4 +57,8 @@ def Soma(obj : Graph):
         return {"result" : matriz.grau_edge(obj.oriented, obj.selected_vertex)}
 
     if ( requisito == 3 ):
+        # Caso o grafo seja orientado será retornado um vetor, o primeiro elemento são os seus sucessores, o segundo é o seu antecessor
         return {"result" : matriz.adjacencia_vertex(obj.oriented, obj.selected_vertex)}
+
+    if ( requisito == 4 ):
+        return { "result": matriz.is_scrappy(obj) }

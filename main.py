@@ -132,7 +132,10 @@ def Soma(obj : Graph):
             for j in range(obj.size):
                 if (adjacencia_lista.isReachable(i, j) and i != j):
                     matriz.adjMatrix[i][j] = 1
-        return { "result": matriz.RF006()}
+        if (matriz.RF006()):
+            return { "result" : 'Grafo unilateralmente conexo' }
+        else:
+            return { "result" : "Grafo não é unilateralmente conexo" }
 
     if (requisito == 7):
         maiorCaminho = 1

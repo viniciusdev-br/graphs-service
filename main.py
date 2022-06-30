@@ -54,25 +54,65 @@ def Soma(obj : Graph):
     if ( requisito == 1):
         test = False
         if obj.oriented == True:
-            for i in graph.edges:
-                if i.start == start and i.end == end:
+            for i in obj.edges:
+                if i.start == obj.selected_vertex and i.end == obj.selected_vertex2:
                     test = True
         else:
             for i in obj.edges:
                 if i.start == obj.selected_vertex and i.end == obj.selected_vertex2 or i.start == obj.selected_vertex2 and i.end == obj.selected_vertex:
                     test = True
-        return {"result": test}
+        if (test):
+            return { "result" : "A aresta existe" }
+        else:
+            return { "result" : "A aresta não existe" }
 
     if ( requisito == 2):
-        matriz.print_matrix()
-        return {"result" : matriz.grau_edge(obj.oriented, obj.selected_vertex)}
+        #matriz.print_matrix()
+        # retorna o grau de um vértice em grafos orientados, e uma lista [número de emissão e recepção] em dígrafos
+        # return {"result" : matriz.grau_edge(obj.oriented, obj.selected_vertex)}
+        output = ""
+        res = matriz.grau_edge(obj.oriented, obj.selected_vertex)
+        if obj.oriented == True:
+            output += "número de emissão: "
+            output += str(res[0])
+            output += "\n"
+            output += "número de recepção: "
+            output += str(res[1])
+            return {"result": output}
+        else:
+            output += "grau do vértice: "
+            output += str(res)
+            return {"result": output}
 
     if ( requisito == 3 ):
         # Caso o grafo seja orientado será retornado um vetor, o primeiro elemento são os seus sucessores, o segundo é o seu antecessor
         return {"result" : matriz.adjacencia_vertex(obj.oriented, obj.selected_vertex)}
+        output = ""
+        res = matriz.adjacencia_vertex(obj.oriented, obj.selected_vertex)
+        if obj.oriented == True:
+            output += "sucessores: "
+            for i in res[0]:
+                output += str(i)
+                output += " "
+            output += "\n"
+            output += "antecessores: "
+            for i in res[1]:
+                output += str(i)
+                output += " "
+            return {"result":output}
+        else:
+            output += "grafos adjacentes: "
+            for i in res:
+                output += str(i)
+                output += " "
+            return {"result":output}
 
     if ( requisito == 4 ):
-        return { "result": matriz.is_scrappy(obj) }
+        #return { "result": matriz.is_scrappy(obj) }
+        if matriz.is_scrappy(obj) == True:
+            return {"result":"Grafo é conexo"}
+        else:
+            return {"result":"Grafo não é conexo"}
 
     if ( requisito == 5 ):
         maiorCaminho = 1

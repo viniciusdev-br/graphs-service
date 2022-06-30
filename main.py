@@ -64,7 +64,7 @@ def Soma(obj : Graph):
         test = False
         if obj.oriented == True:
             for i in obj.edges:
-                if i.start == start and i.end == end:
+                if i.start == obj.selected_vertex and i.end == obj.selected_vertex2:
                     test = True
         else:
             for i in obj.edges:
@@ -83,16 +83,15 @@ def Soma(obj : Graph):
         res = matriz.grau_edge(obj.oriented, obj.selected_vertex)
         if obj.oriented == True:
             output += "número de emissão: "
-            output += res[0]
+            output += str(res[0])
             output += "\n"
             output += "número de recepção: "
-            output += res[1]
+            output += str(res[1])
             return {"result": output}
         else:
             output += "grau do vértice: "
-            output += res
+            output += str(res)
             return {"result": output}
-    
 
     if ( requisito == 3 ):
         # Caso o grafo seja orientado será retornado um vetor, o primeiro elemento são os seus sucessores, o segundo é o seu antecessor
@@ -102,18 +101,18 @@ def Soma(obj : Graph):
         if obj.oriented == True:
             output += "sucessores: "
             for i in res[0]:
-                output += i
+                output += str(i)
                 output += " "
             output += "\n"
             output += "antecessores: "
             for i in res[1]:
-                output += i
+                output += str(i)
                 output += " "
             return {"result":output}
         else:
             output += "grafos adjacentes: "
             for i in res:
-                output += i
+                output += str(i)
                 output += " "
             return {"result":output}
 
@@ -130,6 +129,11 @@ def Soma(obj : Graph):
             for j in range(obj.size):
                 if (adjacencia_lista.isReachable(i, j) and i != j):
                     matriz.adjMatrix[i][j] = 1
+
+        if (matriz.RF005()):
+            return { "result" : 'Grafo fracamente conexo' }
+        else:
+            return { "result" : "Grafo não é fracamente conexo" }
 
         if (matriz.RF005()):
             return { "result" : 'Grafo fracamente conexo' }
@@ -153,14 +157,15 @@ def Soma(obj : Graph):
             for j in range(obj.size):
                 if (adjacencia_lista.isReachable(i, j) and i != j):
                     matriz.adjMatrix[i][j] = 1
-        #adjacencia_lista.printSCCs()
-        #return { "result": matriz.RF007()}
-        if matriz.RF007() == False:
-            return {"result": "Não é fortemente conexo"}
-        else:
-            adjacencia_lista.printSCCs()
-            
         
+        components = adjacencia_lista.printSCCs()
+        if (matriz.RF007()):
+            output = 'Seu grafo é forte \n'
+            output += components
+        else:
+            output = 'Seu grafo não é forte'
+
+        return { "result": output}
 
     if ( requisito == 8 ):
         print(adjacencia_lista._data)
@@ -174,9 +179,14 @@ def Soma(obj : Graph):
         tratado = []
         for i in lista:
             tratado.append(chr(i + 65))
-        return { 'result' : tratado}
+        output = ""
+        for i in tradato:
+            output += i
+            output += " "
+        return {"result": output}
 
     if ( requisito == 10 ):
+        output = ''
         grafo_planar = []
         for i in json_edjes:
             if (i.start == "None"):
@@ -188,14 +198,38 @@ def Soma(obj : Graph):
         k33 = [(0,1),(0,3),(0,5),(1,2),(1,4),(2,3),(2,5),(3,4),(4,5)]
 
         if (matriz.solve(grafo_planar, k5, matriz.size, 5) == False & matriz.solve(grafo_planar, k33, matriz.size, 5) == False):
-            return { 'result' : 'É planar'}
+            print('É planar.')
+            output += "É planar\n"
         else:
-            return { 'result' : 'Não é planar' }
+            print('Não é planar.')
+            output += "Não é planar.\n"
 
         print('2-conexo: ', adjacencia_lista.isBC())
+        output = '2-conexo: '
+        if (adjacencia_lista.isBC()):
+            output += 'Sim \n'
+        else:
+            output += 'Não \n'
 
+        output += 'Euleriano: '
         if (matriz.grauPar()):
             print('Euleriano')
+            output += 'Sim, no caminho: '
+            output += str(matriz.pathEuler(len(json_edjes)))
             print('Caminho: ', matriz.pathEuler(len(json_edjes)))
         else: 
-            return { 'result' : 'Não euleriano' }
+            output += 'Não euleriano'
+            print('Não euleriano')
+
+        return {'result': output}
+
+    if ( requisito == 11):
+        RF11 = Matriz(obj.size)
+    # ----------------- Monta a matriz de adjacência -------------------
+        for i in json_edjes:
+            if (i.end == "None"):
+                print('Sem aresta a adicionar.')
+            else:
+                RF11.add_edge(i.start,i.end, obj.oriented, obj.weighted, i.weight)
+        RF11.print_matrix()
+        

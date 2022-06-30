@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from models.graphs import Graph
 from modules.adjacencia import AdjacencyList
-from modules.matrz import Matriz
+from modules.matriz import Matriz
 
 app = FastAPI()
 
@@ -28,7 +28,7 @@ def HealthCheck():
 @app.post("/teste")
 def Soma(obj : Graph):
 
-    requisito = obg.requirement
+    requisito = obj.requirement
 
     if ( requisito == 1):
         test = False
@@ -37,8 +37,8 @@ def Soma(obj : Graph):
                 if i.start == start and i.end == end:
                     test = True
         else:
-            for i in graph.edges:
-                if i.start == start and i.end == end or i.start == end and i.end == start:
+            for i in obj.edges:
+                if i.start == obj.selected_vertex and i.end == obj.selected_vertex2 or i.start == obj.selected_vertex2 and i.end == obj.selected_vertex:
                     test = True
         return {"result": test}
 

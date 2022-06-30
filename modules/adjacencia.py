@@ -131,32 +131,32 @@ class AdjacencyList(object):
                 nodos_restantes.append(vizinho)
         return False
 
-  def RF012(self,graph): # gera uma árvore geradora mínima (incompleto)
-    AGM = AdjacencyList(graph["size"])
-    weights = []
-    for i in graph["edges"]:
-      weights.append(i["weight"])
+    def RF012(self,graph): # gera uma árvore geradora mínima (incompleto)
+        AGM = AdjacencyList(graph["size"])
+        weights = []
+        for i in graph["edges"]:
+            weights.append(i["weight"])
 
-    counter = 0
+        counter = 0
 
-    while True:
-        if graph["weigthed"] == True:
-            value = max(weights)
-            for i in graph["edges"]:
-                if i["weight"] == value
-                    AGM.conectar(i["start"],i["end"])
-                    weights.remove(value)
-                    # testar se criou ciclo
-                    # if teste_ciclo == True:
-                    #AGM.remover(i["start"],i["end"])
-        else:
-            edge = graph["edges"][counter]
-            AGM.conectar(edge["start"],edge["end"])
-            counter +=1
-            # testar se criou ciclo
-            # if teste_ciclo == True:
-                #AGM.remover(edge["start"],edge["end"])
+        while True:
+            if graph["weigthed"] == True:
+                value = max(weights)
+                for i in graph["edges"]:
+                    if i["weight"] == value:
+                        AGM.conectar(i["start"],i["end"])
+                        weights.remove(value)
+                        # testar se criou ciclo
+                        # if teste_ciclo == True:
+                        #AGM.remover(i["start"],i["end"])
+            else:
+                edge = graph["edges"][counter]
+                AGM.conectar(edge["start"],edge["end"])
+                counter +=1
+                # testar se criou ciclo
+                # if teste_ciclo == True:
+                    #AGM.remover(edge["start"],edge["end"])
 
-      # testar se AGM é conexo
-      # if teste_conexo == True:
-        # return AGM
+        # testar se AGM é conexo
+        # if teste_conexo == True:
+            # return AGM

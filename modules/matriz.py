@@ -204,7 +204,7 @@ class Matriz(object):
                     else: 
                         count = 0
             if (count == 0):
-            return False
+                return False
         else:
             count = 0
             for row in pseudoMatriz:

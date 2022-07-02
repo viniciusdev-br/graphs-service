@@ -40,12 +40,12 @@ def Soma(obj : Graph):
     matriz = Matriz(obj.size)
     
     # ----------------- Monta a matriz de adjacência -------------------
-    if (obj.weighted == False):
-        for i in json_edjes:
-            if (i.end == "None"):
-                print('Sem aresta a adicionar.')
-            else:
-                matriz.add_edge(i.start,i.end, obj.oriented)
+
+    for i in json_edjes:
+        if (i.end == "None"):
+            print('Sem aresta a adicionar.')
+        else:
+            matriz.add_edge(i.start,i.end, obj.oriented, obj.weighted, i.weight)
 
     requisito = obj.requirement
 

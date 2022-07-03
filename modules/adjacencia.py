@@ -2,6 +2,7 @@ from itertools import product
 from collections import defaultdict
 import numpy as np
 import random
+import heapq
 
 class AdjacencyList(object):
     def __init__(self, size):
@@ -215,7 +216,7 @@ class AdjacencyList(object):
 
     def printPath(self, parent, j):
         Path_len = 1
-        if parent[j] == -1 and j < self.V_org : 
+        if parent[j] == -1 and j < self.size_org : 
             self.pathNoWeighted.append(j)
             print(j),
             return 0 
@@ -223,11 +224,29 @@ class AdjacencyList(object):
 
         Path_len = l + Path_len
 
-        if j < self.V_org :
+        if j < self.size_org :
             self.pathNoWeighted.append(j)
             print(j),
  
         return Path_len           
+
+    def RF011Weighted(edges, source, sink):
+        graph = collections.defaultdict(list)
+        for l, r, c in edges:
+            graph[l].append((c,r))
+        queue, visited = [(0, source, [])], set()
+        heapq.heapify(queue)
+        while queue:
+            (cost, node, path) = heapq.heappop(queue)
+            if node not in visited:
+                visited.add(node)
+                path = path + [node]
+                if node == sink:
+                    return path
+                for c, neighbour in graph[node]:
+                    if neighbour not in visited:
+                        heapq.heappush(queue, (cost+c, neighbour, path))
+        return float("inf")
 
     def RF012(self,graph): # gera uma árvore geradora mínima (incompleto)
         AGM = AdjacencyList(graph["size"])

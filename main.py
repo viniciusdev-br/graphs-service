@@ -225,14 +225,14 @@ def Soma(obj : Graph):
 
     if ( requisito == 11):
         if (obj.weighted):
-            grafo = []
+            graf = []
             for i in json_edjes:
                 if (i.start == "None" or i.start == "None"):
                     print('Sem aresta a adicionar.')
                 else:
-                    grafo.append((i.start, i.end))
-            print(grafo)
-            output = adjacencia_lista.RF011Weighted(grafo, obj.selected_vertex, obj.selected_vertex2)
+                    graf.append((i.start, i.end, i.weight))
+            print(graf)
+            output = adjacencia_lista.RF011Weighted(graf, obj.selected_vertex, obj.selected_vertex2)
             return {"result": output}
         else:
             adjacencia_lista.RF011Noweighted(ord(obj.selected_vertex)-65, ord(obj.selected_vertex2)-65)

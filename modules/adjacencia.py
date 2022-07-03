@@ -230,8 +230,8 @@ class AdjacencyList(object):
  
         return Path_len           
 
-    def RF011Weighted(edges, source, sink):
-        graph = collections.defaultdict(list)
+    def RF011Weighted(self, edges, source, sink):
+        graph = defaultdict(list)
         for l, r, c in edges:
             graph[l].append((c,r))
         queue, visited = [(0, source, [])], set()

@@ -224,12 +224,20 @@ def Soma(obj : Graph):
         return {'result': output}
 
     if ( requisito == 11):
-        RF11 = Matriz(obj.size)
-    # ----------------- Monta a matriz de adjacência -------------------
-        for i in json_edjes:
-            if (i.end == "None"):
-                print('Sem aresta a adicionar.')
-            else:
-                RF11.add_edge(i.start,i.end, obj.oriented, obj.weighted, i.weight)
-        RF11.print_matrix()
-        
+        if (obj.weighted):
+            graf = []
+            for i in json_edjes:
+                if (i.start == "None" or i.start == "None"):
+                    print('Sem aresta a adicionar.')
+                else:
+                    graf.append((i.start, i.end, i.weight))
+            print(graf)
+            output = adjacencia_lista.RF011Weighted(graf, obj.selected_vertex, obj.selected_vertex2)
+            return {"result": output}
+        else:
+            adjacencia_lista.RF011Noweighted(ord(obj.selected_vertex)-65, ord(obj.selected_vertex2)-65)
+            numericPath = adjacencia_lista.pathNoWeighted
+            output = []
+            for i in numericPath:
+                output.append(chr(i + 65))
+            return {"result": output}

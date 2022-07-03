@@ -2,11 +2,15 @@ from itertools import product
 from collections import defaultdict
 import numpy as np
 import random
+import heapq
 
 class AdjacencyList(object):
     def __init__(self, size):
         self._data = defaultdict(list)
         self.size = size
+        self.size_org = size
+        self.pathWeight = []
+        self.pathNoWeighted = []
         self.Time = 0
         self.Fortes = ''
 
@@ -189,6 +193,60 @@ class AdjacencyList(object):
                 self.visita(vertice, d, f, ordem_topologica)
 
         return list(reversed(ordem_topologica))
+
+    def RF011Noweighted(self, src, dest):
+        visited =[False]*(self.size)
+        parent =[-1]*(self.size)
+        queue=[]
+        queue.append(src)
+        visited[src] = True
+  
+        while queue :
+             
+            s = queue.pop(0)
+             
+            if s == dest:
+                return self.printPath(parent, s)
+                 
+            for i in self._data[s]:
+                if visited[i] == False:
+                    queue.append(i)
+                    visited[i] = True
+                    parent[i] = s     
+
+    def printPath(self, parent, j):
+        Path_len = 1
+        if parent[j] == -1 and j < self.size_org : 
+            self.pathNoWeighted.append(j)
+            print(j),
+            return 0 
+        l = self.printPath(parent , parent[j])
+
+        Path_len = l + Path_len
+
+        if j < self.size_org :
+            self.pathNoWeighted.append(j)
+            print(j),
+ 
+        return Path_len           
+
+    def RF011Weighted(self, edges, source, sink):
+        graph = defaultdict(list)
+        for l, r, c in edges:
+            graph[l].append((c,r))
+        queue, visited = [(0, source, [])], set()
+        heapq.heapify(queue)
+        while queue:
+            (cost, node, path) = heapq.heappop(queue)
+            if node not in visited:
+                visited.add(node)
+                path = path + [node]
+                if node == sink:
+                    return path
+                for c, neighbour in graph[node]:
+                    if neighbour not in visited:
+                        heapq.heappush(queue, (cost+c, neighbour, path))
+        return float("inf")
 
     def RF012(self,graph): # gera uma árvore geradora mínima (incompleto)
         AGM = AdjacencyList(graph["size"])

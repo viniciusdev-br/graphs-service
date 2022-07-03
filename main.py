@@ -241,3 +241,9 @@ def Soma(obj : Graph):
             for i in numericPath:
                 output.append(chr(i + 65))
             return {"result": output}
+    if requisito == 12:
+        graph_generator = GraphGenerator()
+        lista = adjacencia_lista.RF012(obj)
+        image_bytes = graph_generator.render_graph({"oriented": True,"edges": lista})
+        encoded_image = b64encode(image_bytes)
+        return {"data":encoded_image}

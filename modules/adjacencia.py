@@ -248,32 +248,50 @@ class AdjacencyList(object):
                         heapq.heappush(queue, (cost+c, neighbour, path))
         return float("inf")
 
-    def RF012(self,graph): # gera uma árvore geradora mínima (incompleto)
-        AGM = AdjacencyList(graph["size"])
+    def RF012(self,graph): # gera uma árvore geradora mínima
+        AGM = AdjacencyList(graph.size)
+        print(graph)
         weights = []
-        for i in graph["edges"]:
-            weights.append(i["weight"])
-
+        removed = []
+        added = []
+        for i in graph.edges:
+            weights.append(i.weight)
         counter = 0
 
         while True:
-            if graph["weigthed"] == True:
-                value = max(weights)
-                for i in graph["edges"]:
-                    if i["weight"] == value:
-                        AGM.conectar(i["start"],i["end"])
+            if graph.weighted == True:
+                value = min(weights)
+                for i in graph.edges :
+                    if i.weight  == value and [i.start ,i.end ,i.weight ] not in removed and [i.start ,i.end ,i.weight ] not in added:
+                        AGM.conectar(i.start ,i.end )
                         weights.remove(value)
-                        # testar se criou ciclo
-                        # if teste_ciclo == True:
-                        #AGM.remover(i["start"],i["end"])
-            else:
-                edge = graph["edges"][counter]
-                AGM.conectar(edge["start"],edge["end"])
-                counter +=1
-                # testar se criou ciclo
-                # if teste_ciclo == True:
-                    #AGM.remover(edge["start"],edge["end"])
-
-        # testar se AGM é conexo
-        # if teste_conexo == True:
-            # return AGM
+                        teste_ciclo = AGM.tem_ciclo()
+                        if teste_ciclo == True:
+                            removed.append([i.start ,i.end ,i.weight ])
+                            AGM.remover(i.start ,i.end )
+                        else:
+                            added.append([i.start ,i.end ,i.weight ])
+                    else:
+                        print(' ---------------------------------------------------------------------------------------------------------------- ',counter)
+                        edge = graph.edges[counter]
+                        counter +=1
+                        AGM.conectar(edge.start ,edge.end )
+                        teste_ciclo = AGM.tem_ciclo()
+                        if teste_ciclo == True:
+                            removed.append([edge.start ,edge.end ])
+                            AGM.remover(edge.start ,edge.end )
+                        else:
+                            added.append([edge.start ,edge.end ])
+                        print(' len we ',len(weights))
+                
+            if len(weights) == 0:
+                return_list = []
+                for i in added:
+                    if graph.weighted == True:
+                        aresta = {"start":i[0],"end":i[1],"weight":i[2]}
+                        return_list.append(aresta)
+                    else:
+                        aresta = {"start":i[0],"end":i[1],"weight":0}
+                        return_list.append(aresta)
+                print('-------------------------------', return_list)
+                return return_list

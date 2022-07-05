@@ -1,5 +1,8 @@
+import types
+
 from pydantic import BaseModel
 from fastapi import FastAPI
+
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from base64 import b64encode
@@ -250,10 +253,11 @@ def Soma(obj : Graph):
         for i in json_edjes:
             req12.add_edge(ord(i.start) - 65 , ord(i.end) - 65, i.weight)
         
-        output = req12.kruskal()
+        # create output object
+        output = types.SimpleNamespace()
+        output.oriented = False
+        output.edges = req12.kruskal()
 
-        print(output)
-
-        image_bytes = graph_generator.render_graph({"oriented": False,"edges": output})
+        image_bytes = graph_generator.render_graph(output)
         encoded_image = b64encode(image_bytes)
         return {"data":encoded_image}

@@ -1,3 +1,4 @@
+import types
 from itertools import product
 from collections import defaultdict
 from queue import PriorityQueue
@@ -297,7 +298,7 @@ class Req12:
   
     def kruskal(self):
         result = []
-        output = []
+        output = list()
         i, e = 0, 0
         self.graph = sorted(self.graph, key=lambda item: item[2])
         parent = []
@@ -316,5 +317,9 @@ class Req12:
                 self.apply_union(parent, rank, x, y)
         
         for u, v, weight in result:
-            output.append({"start": chr(u + 65),"end":chr(v + 65),"weight":weight})
+            edge = types.SimpleNamespace()
+            edge.start = chr(u + 65)
+            edge.end = chr(v + 65)
+            edge.weight = weight
+            output.append(edge)
         return output

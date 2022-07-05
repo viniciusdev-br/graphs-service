@@ -12,7 +12,7 @@ class AdjacencyList(object):
         self.pathWeight = []
         self.pathNoWeighted = []
         self.Time = 0
-        self.Fortes = ''
+        self.Fortes = []
 
     def conectar(self, nodo_origem, nodo_destino):
         self._data[nodo_origem].append(nodo_destino)
@@ -20,13 +20,6 @@ class AdjacencyList(object):
     def remover(self, nodo_origem, nodo_destino):
         self._data[nodo_origem].remove(nodo_destino)
 
-    def DFSUtil(self,v,visited):
-        visited[v]= True
-        self.Fortes += chr(v + 65)
-        print(chr(v + 65))
-        for i in self._data[v]:
-            if visited[i]==False:
-                self.DFSUtil(i,visited)
 
     def fillOrder(self,v,visited, stack):
         visited[v]= True
@@ -42,6 +35,15 @@ class AdjacencyList(object):
                 g.conectar(j,i)
         return g
 
+    def DFSUtil(self,v,visited):
+        visited[v]= True
+        self.Fortes.append(chr(v + 65))
+        print(self.Fortes)
+        print('- --',chr(v + 65))
+        for i in self._data[v]:
+            if visited[i]==False:
+                self.DFSUtil(i,visited)
+
     def printSCCs(self):
         stack = []
         visited =[False]*(self.size)
@@ -55,7 +57,10 @@ class AdjacencyList(object):
             if visited[i]==False:
                 gr.DFSUtil(i, visited)
                 print("")
-                self.Fortes += "\n"
+                gr.Fortes.append(" - ")
+
+        print('Componentes: ', gr.Fortes)
+        self.Fortes = gr.Fortes
         return 'OI'
 
     def vizinhos(self, nodo):

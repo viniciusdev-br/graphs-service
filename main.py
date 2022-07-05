@@ -158,13 +158,13 @@ def Soma(obj : Graph):
             for j in range(obj.size):
                 if (adjacencia_lista.isReachable(i, j) and i != j):
                     matriz.adjMatrix[i][j] = 1
-        
         components = adjacencia_lista.printSCCs()
         if (matriz.RF007()):
-            output = 'Seu grafo é forte \n'
-            output += components
+            output = 'Seu grafo é forte e os componentes são '
+            output += str(adjacencia_lista.Fortes)
         else:
-            output = 'Seu grafo não é forte'
+            output = 'Seu grafo não é forte e os componentes são: '
+            output += str(adjacencia_lista.Fortes)
 
         return { "result": output}
 

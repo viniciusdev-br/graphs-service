@@ -6,6 +6,7 @@ from base64 import b64encode
 from models.graphs import Graph, RenderGraph
 from modules.adjacencia import AdjacencyList
 from modules.matriz import Matriz
+from modules.matriz import Req12
 from modules.render_graph import GraphGenerator
 
 app = FastAPI()
@@ -32,7 +33,7 @@ def RenderGraph(graph: RenderGraph):
     image_bytes = graph_generator.render_graph(graph)
     encoded_image = b64encode(image_bytes)
     return { "data": encoded_image }
-    
+        
 @app.post("/teste")
 def Soma(obj : Graph):
 
@@ -180,7 +181,7 @@ def Soma(obj : Graph):
         for i in lista:
             tratado.append(chr(i + 65))
         output = ""
-        for i in tradato:
+        for i in tratado:
             output += i
             output += " "
         return {"result": output}
@@ -243,7 +244,16 @@ def Soma(obj : Graph):
             return {"result": output}
     if requisito == 12:
         graph_generator = GraphGenerator()
-        lista = adjacencia_lista.RF012(obj)
-        image_bytes = graph_generator.render_graph({"oriented": True,"edges": lista})
+
+        req12 = Req12(obj.size)
+
+        for i in json_edjes:
+            req12.add_edge(ord(i.start) - 65 , ord(i.end) - 65, i.weight)
+        
+        output = req12.kruskal()
+
+        print(output)
+
+        image_bytes = graph_generator.render_graph({"oriented": False,"edges": output})
         encoded_image = b64encode(image_bytes)
         return {"data":encoded_image}

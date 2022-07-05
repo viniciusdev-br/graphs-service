@@ -6,11 +6,11 @@ class GraphGenerator(object):
         self.graph = graphviz.Graph('G', graph_attr={'rankdir': 'LR'})
 
     def render_graph(self, graph : RenderGraph):
-        if(graph.oriented):
+        if(graph["oriented"]):
             self.graph = graphviz.Digraph('G', graph_attr={'rankdir': 'LR'})
         
-        for edge in graph.edges:
-            self.graph.edge(edge.start, edge.end, label=str(edge.weight))
+        for edge in graph["edges"]:
+            self.graph.edge(edge["start"], edge["end"], label=str(edge["weight"]))
 
         # generate graph image and return it in bytes
         return self.graph.pipe(format='png')

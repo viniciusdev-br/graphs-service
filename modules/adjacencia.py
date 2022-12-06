@@ -237,9 +237,9 @@ class AdjacencyList(object):
         return Path_len           
 
     def RF011Weighted(self, edges, source, sink):
-        graph = defaultdict(list)
-        for l, r, c in edges:
-            graph[l].append((c,r))
+        graph = [[] for n in range(self.size)]
+        for p, r, c in edges:
+            graph[p].append((c,r))
         queue, visited = [(0, source, [])], set()
         heapq.heapify(queue)
         while queue:
@@ -252,7 +252,7 @@ class AdjacencyList(object):
                 for c, neighbour in graph[node]:
                     if neighbour not in visited:
                         heapq.heappush(queue, (cost+c, neighbour, path))
-        return float("inf")
+        return path
 
     def RF012(self,graph): # gera uma árvore geradora mínima
         AGM = AdjacencyList(graph.size)

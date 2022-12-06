@@ -39,19 +39,20 @@ def RenderGraph(graph: RenderGraph):
         
 @app.post("/teste")
 def Soma(obj : Graph):
+    adjacencia_lista_requisitos = [11]
 
     json_edjes = obj.edges
     matriz = Matriz(obj.size)
+    requisito = obj.requirement
     
     # ----------------- Monta a matriz de adjacência -------------------
+    if (requisito not in adjacencia_lista_requisitos):
+        for i in json_edjes:
+            if (i.end == "None"):
+                print('Sem aresta a adicionar.')
+            else:
+                matriz.add_edge(i.start,i.end, obj.oriented, obj.weighted, i.weight)
 
-    for i in json_edjes:
-        if (i.end == "None"):
-            print('Sem aresta a adicionar.')
-        else:
-            matriz.add_edge(i.start,i.end, obj.oriented, obj.weighted, i.weight)
-
-    requisito = obj.requirement
 
     # ------------------ Monta a lista de adjacência -------------------
 
@@ -234,9 +235,9 @@ def Soma(obj : Graph):
                 if (i.start == "None" or i.start == "None"):
                     print('Sem aresta a adicionar.')
                 else:
-                    graf.append((i.start, i.end, i.weight))
+                    graf.append((int(i.start), int(i.end), int(i.weight)))
             print(graf)
-            output = adjacencia_lista.RF011Weighted(graf, obj.selected_vertex, obj.selected_vertex2)
+            output = adjacencia_lista.RF011Weighted(graf, int(obj.selected_vertex), int(obj.selected_vertex2))
             return {"result": output}
         else:
             adjacencia_lista.RF011Noweighted(ord(obj.selected_vertex)-65, ord(obj.selected_vertex2)-65)

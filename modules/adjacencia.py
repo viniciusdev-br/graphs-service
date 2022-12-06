@@ -211,6 +211,7 @@ class AdjacencyList(object):
             s = queue.pop(0)
              
             if s == dest:
+                print("================================================", self._data)
                 return self.printPath(parent, s)
                  
             for i in self._data[s]:

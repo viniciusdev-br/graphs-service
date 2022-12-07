@@ -281,6 +281,10 @@ def Soma(obj : Graph):
     if requisito == 13:
         result = buscaDFS.printClassificacaoArestas()
         return {"result": result}
+    
+    if requisito == 14:
+        result = buscaDFS.printCiclo()
+        return {"result": result}
 
 """         if (obj.weighted):
             graf = []

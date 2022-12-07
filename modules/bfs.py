@@ -134,15 +134,17 @@ class DFS:
         print(self.componentesFortes)
 
     def printCiclo(self):
+        result = []
         if not self.ciclo:
             print("Não existe ciclo neste grafo!")
-            return
+            return "Não existe ciclo neste grafo!"
 
-        print("Existe ciclo neste grafo!")
-        print("Ciclos existentes:")
+        result.append("Existe ciclo neste grafo!")
+        result.append("Ciclos existentes:")
         for ciclo in self.grafo.lista_ciclos:
-            print(
-                f'{self.grafo.vertices[ciclo[0]]} - {self.grafo.vertices[ciclo[1]]}')
+            result.append("" + self.grafo.vertices[ciclo[0]] + " - " +self.grafo.vertices[ciclo[1]])
+            print(f'{self.grafo.vertices[ciclo[0]]} - {self.grafo.vertices[ciclo[1]]}')
+        return result
 
     def classificarAresta(self, cor, aresta, du, dv):
         if cor == self.branco:

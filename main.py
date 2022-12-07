@@ -11,6 +11,8 @@ from modules.adjacencia import AdjacencyList
 from modules.matriz import Matriz
 from modules.matriz import Req12
 from modules.render_graph import GraphGenerator
+from modules.bfs import DFS
+from modules.bfs import Grafo
 
 app = FastAPI()
 
@@ -39,13 +41,15 @@ def RenderGraph(graph: RenderGraph):
         
 @app.post("/teste")
 def Soma(obj : Graph):
-    adjacencia_lista_requisitos = [11]
+    adjacencia_lista_requisitos = [11, 13]
+    yonas_algs = [13]
 
     json_edjes = obj.edges
     matriz = Matriz(obj.size)
     requisito = obj.requirement
     
     # ----------------- Monta a matriz de adjacência -------------------
+    print(obj)
     if (requisito not in adjacencia_lista_requisitos):
         for i in json_edjes:
             if (i.end == "None"):
@@ -63,7 +67,18 @@ def Soma(obj : Graph):
         else:
             adjacencia_lista.conectar(ord(i.start) - 65,ord(i.end) -65)
 
-# _________________________________________________________________
+    # ------------------ Monta a lista de adjacência de Jonas -------------------
+    arestas = []
+    for i in json_edjes:
+        arestas.append([i.start,i.end])
+    print(arestas)
+    grafo = Grafo(arestas)
+    for aresta in arestas:  # inserindo as arestas
+       grafo.inserirAresta(grafo.vertices.index(aresta[0]), grafo.vertices.index(aresta[1]))
+    buscaDFS = DFS(grafo, obj.selected_vertex)
+    buscaDFS.dfs()
+
+    # _________________________________________________________________
 
     if ( requisito == 1):
         test = False
@@ -262,3 +277,25 @@ def Soma(obj : Graph):
         image_bytes = graph_generator.render_graph(output)
         encoded_image = b64encode(image_bytes)
         return {"data":encoded_image}
+
+    if requisito == 13:
+        result = buscaDFS.printClassificacaoArestas()
+        return {"result": result}
+
+"""         if (obj.weighted):
+            graf = []
+            for i in json_edjes:
+                if (i.start == "None" or i.start == "None"):
+                    print('Sem aresta a adicionar.')
+                else:
+                    graf.append((int(i.start), int(i.end), int(i.weight)))
+            print(graf)
+            output = adjacencia_lista.RF011Weighted(graf, int(obj.selected_vertex), int(obj.selected_vertex2))
+            return {"result": output}
+        else:
+            adjacencia_lista.RF011Noweighted(ord(obj.selected_vertex)-65, ord(obj.selected_vertex2)-65)
+            numericPath = adjacencia_lista.pathNoWeighted
+            output = []
+            for i in numericPath:
+                output.append(chr(i + 65))
+            return {"result": output} """

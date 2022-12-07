@@ -24,8 +24,12 @@ class Grafo:
       self.lista_adjacente[u].sort()
         
     def printListaAdj(self):
+        result = []
         for i in range(len(self.lista_adjacente)):
             print(f"{self.vertices[i]}: {', '.join(str(self.vertices[x]) for x in self.lista_adjacente[i])}")
+            result.append(''+self.vertices[i]+': ' + ', '.join(str(self.vertices[x]) for x in self.lista_adjacente[i]))
+            print(result)
+        return result
 
     def listaAdjVazia(self, u):
       if len(self.lista_adjacente[u]) == 0:

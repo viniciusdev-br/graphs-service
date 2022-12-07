@@ -4,6 +4,7 @@ from collections import defaultdict
 from queue import PriorityQueue
 import numpy as np
 import random
+import heapq
 
 class Matriz(object):
 
@@ -268,6 +269,63 @@ class Matriz(object):
         else:
             #return vertices
             return False
+
+    def minDistancia(self, dist, sptSer, tamanho):
+        min = 99999999
+        min_index = 0
+        for v in range(tamanho):
+            if (sptSer[v] == False and dist[v] <= min):
+                min = dist[v]
+                min_index = v
+        return min_index;
+    
+    def dijkstra(self, graph, src, tamanho):
+        dist = [999999 for n in range(tamanho)]
+        sptSet = [False for n in range(tamanho)]
+        dist[src] = 0
+        for count in range(tamanho):
+            u = self.minDistancia(dist, sptSet, tamanho)
+            sptSet[u] = True
+            for v in range(tamanho):
+                if ((not sptSet[v]) and graph[u][v] and (dist[u] != 999999) and dist[u] + graph[u][v] < dist[v]):
+                    dist[v] = dist[u] + graph[u][v]
+        result = [f"Para o vértice {src} temos os respectivos pesos mínimos alcançados: "]
+        print("V - D")
+        for i in range(len(dist)):
+            print(i,'-',dist[i])
+            result.append(''+str(chr(i+65))+' - '+str(dist[i]))
+        return result
+
+    def prim(self, vizinhos,raiz):
+        n = len(vizinhos)
+
+        H = []
+
+        print(raiz)
+
+        for (x,c) in vizinhos[raiz]: heapq.heappush(H, (c, raiz, x)) #Adiciona os vertices adjecente à raiz
+        print(H)
+
+        aresta = 0
+        custo_total = 0 
+        vertices_encontradas = [raiz] #Adiciona a raiz nos vertices encontrados
+        solucao = [] 
+
+        while aresta < n-1:
+            while True:
+                (c,a,b) = heapq.heappop(H) 
+                if b not in vertices_encontradas:
+                    break
+            vertices_encontradas.append(b) #adiciona uma vertice a solucao
+            custo_total += c
+            solucao.append((a,b))
+            aresta += 1
+            for (x, c) in vizinhos[b]:
+                if x not in vertices_encontradas:
+                    heapq.heappush(H, (c, b, x))
+        print(solucao)
+        print(custo_total)
+        return [custo_total, str(solucao)]
         
 class Req12:
     def __init__(self, vertex):
@@ -323,3 +381,10 @@ class Req12:
             edge.weight = weight
             output.append(edge)
         return output
+#vizinhos = [[(1,6),(2,1),(3,5)], #0
+#            [(0,6),(2,2),(4,5)], #1
+#            [(0,1),(1,2),(3,2),(4,6),(5,5)], #2
+#            [(0,5),(2,2),(5,4)], #3
+#            [(1,5),(2,6),(5,3)], #4
+#            [(2,4),(3,4),(4,3)]] #5
+

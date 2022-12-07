@@ -38,8 +38,9 @@ def RenderGraph(graph: RenderGraph):
     image_bytes = graph_generator.render_graph(graph)
     encoded_image = b64encode(image_bytes)
     return { "data": encoded_image }
-        
+
 @app.post("/teste")
+
 def Soma(obj : Graph):
     adjacencia_lista_requisitos = [11, 13]
     yonas_algs = [13]
@@ -71,7 +72,6 @@ def Soma(obj : Graph):
     arestas = []
     for i in json_edjes:
         arestas.append([i.start,i.end])
-    print(arestas)
     grafo = Grafo(arestas)
     for aresta in arestas:  # inserindo as arestas
        grafo.inserirAresta(grafo.vertices.index(aresta[0]), grafo.vertices.index(aresta[1]))
@@ -286,6 +286,37 @@ def Soma(obj : Graph):
         result = buscaDFS.printCiclo()
         return {"result": result}
 
+    if requisito == 15:
+        result = buscaDFS.ordemTopologica()
+        return {"result": result}
+
+    if requisito == 16:
+        buscaDFS.dfsTransposta()
+        result = buscaDFS.printComponentesFortes()
+        return {"result": result}
+
+    if requisito == 17:
+        result = matriz.dijkstra(matriz.adjMatrix, ord(obj.selected_vertex) - 65, grafo.numVertices)
+        return {"result": result}
+
+    if requisito == 18:
+        vizinhos = [[] for _ in range(grafo.numVertices)]
+        teste = [[] for _ in range(grafo.numVertices)]
+        vertices = grafo.vertices
+        print(type(json_edjes[0].dict()))
+        for i in range(len(json_edjes)):
+            vizinhos[i] = [x for x in json_edjes[i].dict().values()]
+
+        for i in vizinhos:
+            teste[vertices.index(i[0])].append((ord(i[1])-65, i[2]))
+
+        result = matriz.prim(teste, ord(obj.selected_vertex) - 65)
+        return {"result": result}
+
+    if requisito == 19:
+        result = grafo.printListaAdj()
+        print('result: ', result)
+        return {"result": result}
 """         if (obj.weighted):
             graf = []
             for i in json_edjes:

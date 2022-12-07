@@ -38,9 +38,11 @@ class Grafo:
             self.lista_adjacente[w].sort()
 
     def printListaAdj(self):
+        result = []
         for i in range(len(self.lista_adjacente)):
-            print(
-                f"{self.vertices[i]}: {', '.join(str(self.vertices[x]) for x in self.lista_adjacente[i])}")
+            print(f"{self.vertices[i]}: {', '.join(str(self.vertices[x]) for x in self.lista_adjacente[i])}")
+            result.append(''+self.vertices[i]+': ' + ', '.join(str(self.vertices[x]) for x in self.lista_adjacente[i]))
+        return str(result)
 
     def printListaAdjTransposta(self):
         for i in range(len(self.lista_adjacente_transposta)):
@@ -131,7 +133,9 @@ class DFS:
                 print(None)
 
     def printComponentesFortes(self):
+        print('--------------------------------')
         print(self.componentesFortes)
+        return str(self.componentesFortes)
 
     def printCiclo(self):
         result = []
@@ -161,10 +165,12 @@ class DFS:
             return "Retorno"
 
     def ordemTopologica(self):
+        result = []
         terminos = self.t[:]
         ordemTerminos = [self.grafo.vertices[extractMax(
             terminos)] for _ in range(len(terminos))]
         print(ordemTerminos)
+        return(ordemTerminos)
 
     def dfs(self):
         tempo = 0

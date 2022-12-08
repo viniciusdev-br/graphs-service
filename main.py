@@ -317,20 +317,8 @@ def Soma(obj : Graph):
         result = grafo.printListaAdj()
         print('result: ', result)
         return {"result": result}
-"""         if (obj.weighted):
-            graf = []
-            for i in json_edjes:
-                if (i.start == "None" or i.start == "None"):
-                    print('Sem aresta a adicionar.')
-                else:
-                    graf.append((int(i.start), int(i.end), int(i.weight)))
-            print(graf)
-            output = adjacencia_lista.RF011Weighted(graf, int(obj.selected_vertex), int(obj.selected_vertex2))
-            return {"result": output}
-        else:
-            adjacencia_lista.RF011Noweighted(ord(obj.selected_vertex)-65, ord(obj.selected_vertex2)-65)
-            numericPath = adjacencia_lista.pathNoWeighted
-            output = []
-            for i in numericPath:
-                output.append(chr(i + 65))
-            return {"result": output} """
+
+    if requisito == 20:
+        result = "O grafo tem " + str(grafo.numVertices) + " vértices e " + str(len(json_edjes)) + " arestas"
+        print(result)
+        return {"result": result}

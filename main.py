@@ -74,7 +74,7 @@ def Soma(obj : Graph):
         arestas.append([i.start,i.end])
     grafo = Grafo(arestas)
     for aresta in arestas:  # inserindo as arestas
-       grafo.inserirAresta(grafo.vertices.index(aresta[0]), grafo.vertices.index(aresta[1]))
+        grafo.inserirAresta(grafo.vertices.index(aresta[0]), grafo.vertices.index(aresta[1]))
     buscaDFS = DFS(grafo, obj.selected_vertex)
     buscaDFS.dfs()
 
@@ -244,7 +244,7 @@ def Soma(obj : Graph):
         return {'result': output}
 
     if ( requisito == 11):
-        if (obj.weighted):
+        '''if (obj.weighted):
             graf = []
             for i in json_edjes:
                 if (i.start == "None" or i.start == "None"):
@@ -255,12 +255,18 @@ def Soma(obj : Graph):
             output = adjacencia_lista.RF011Weighted(graf, int(obj.selected_vertex), int(obj.selected_vertex2))
             return {"result": output}
         else:
-            adjacencia_lista.RF011Noweighted(ord(obj.selected_vertex)-65, ord(obj.selected_vertex2)-65)
+            adjacencia_lista.RF011Noweighted(int(obj.selected_vertex), int(obj.selected_vertex2))
             numericPath = adjacencia_lista.pathNoWeighted
+            print('aa: ', numericPath)
             output = []
             for i in numericPath:
                 output.append(chr(i + 65))
-            return {"result": output}
+            return {"result": output}'''
+        result = ''
+        for x in matriz.bfs(obj.selected_vertex, grafo.lista_adjacente, grafo.vertices):
+            result += str(x[0])
+        return {"result": result}
+
     if requisito == 12:
         graph_generator = GraphGenerator()
 
@@ -272,7 +278,7 @@ def Soma(obj : Graph):
         # create output object
         output = types.SimpleNamespace()
         output.oriented = False
-        output.edges = req12.kruskal()
+        output.edges = matriz.prim(json_edjes, obj.selected_vertex, grafo.numVertices, grafo.vertices)[0]
 
         image_bytes = graph_generator.render_graph(output)
         encoded_image = b64encode(image_bytes)
@@ -300,18 +306,23 @@ def Soma(obj : Graph):
         return {"result": result}
 
     if requisito == 18:
-        vizinhos = [[] for _ in range(grafo.numVertices)]
-        teste = [[] for _ in range(grafo.numVertices)]
-        vertices = grafo.vertices
-        print(type(json_edjes[0].dict()))
-        for i in range(len(json_edjes)):
-            vizinhos[i] = [x for x in json_edjes[i].dict().values()]
+        graph_generator = GraphGenerator()
 
-        for i in vizinhos:
-            teste[vertices.index(i[0])].append((ord(i[1])-65, i[2]))
+        req12 = Req12(obj.size)
 
-        result = matriz.prim(teste, ord(obj.selected_vertex) - 65)
-        return {"result": result}
+        for i in json_edjes:
+            req12.add_edge(ord(i.start) - 65 , ord(i.end) - 65, i.weight)
+        
+        # create output object
+        output = types.SimpleNamespace()
+        output.oriented = False
+        output.edges = matriz.prim(json_edjes, obj.selected_vertex, grafo.numVertices, grafo.vertices)[0]
+
+        image_bytes = graph_generator.render_graph(output)
+        encoded_image = b64encode(image_bytes)
+
+        result = matriz.prim(json_edjes, obj.selected_vertex, grafo.numVertices, grafo.vertices)
+        return {"data": encoded_image, "result": result[1]}
 
     if requisito == 19:
         result = grafo.printListaAdj()

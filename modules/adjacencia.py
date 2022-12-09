@@ -233,7 +233,7 @@ class AdjacencyList(object):
         if j < self.size_org :
             self.pathNoWeighted.append(j)
             print(j),
- 
+        print('aaa: ', Path_len)
         return Path_len           
 
     def RF011Weighted(self, edges, source, sink):

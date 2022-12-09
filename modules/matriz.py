@@ -296,19 +296,26 @@ class Matriz(object):
             result.append(''+str(chr(i+65))+' - '+str(dist[i]))
         return result
 
-    def prim(self, vizinhos,raiz):
-        n = len(vizinhos)
+    def prim(self, edges, raiz, numVertices, vertices):
+        adjEdges = [[] for _ in range(len(edges))]
+        listaAdj = [[] for _ in range(numVertices)]
+
+        for i in range(len(edges)):
+            adjEdges[i] = [x for x in edges[i].dict().values()]
+
+        for i in adjEdges:
+            listaAdj[vertices.index(i[0])].append((i[1], i[2]))
+
+        n = len(listaAdj)
 
         H = []
 
-        print(raiz)
-
-        for (x,c) in vizinhos[raiz]: heapq.heappush(H, (c, raiz, x)) #Adiciona os vertices adjecente à raiz
-        print(H)
+        for (x,c) in listaAdj[vertices.index(raiz)]:
+            heapq.heappush(H, (c, vertices.index(raiz), vertices.index(x))) #Adiciona os vertices adjecente à raiz
 
         aresta = 0
         custo_total = 0 
-        vertices_encontradas = [raiz] #Adiciona a raiz nos vertices encontrados
+        vertices_encontradas = [vertices.index(raiz)] #Adiciona a raiz nos vertices encontrados
         solucao = [] 
 
         while aresta < n-1:
@@ -318,14 +325,52 @@ class Matriz(object):
                     break
             vertices_encontradas.append(b) #adiciona uma vertice a solucao
             custo_total += c
-            solucao.append((a,b))
+            solucao.append((vertices[a], vertices[b], c))
             aresta += 1
-            for (x, c) in vizinhos[b]:
+
+            for (x, c) in listaAdj[b]:
+                x = vertices.index(x)
                 if x not in vertices_encontradas:
                     heapq.heappush(H, (c, b, x))
-        print(solucao)
-        print(custo_total)
-        return [custo_total, str(solucao)]
+
+        output = []
+        for u, v, weight in solucao:
+            edge = types.SimpleNamespace()
+            edge.start = u
+            edge.end = v
+            edge.weight = weight
+            output.append(edge)  
+        return [output, [custo_total, str(solucao)]]
+    
+    def bfs(self, start, graph, edges):
+        predecessors = [None for _ in range(len(edges))]
+        result = [[] for _ in edges]
+        queue = [edges.index(start)]
+        visited = [False]*len(edges)
+        visited[0] = True
+
+        while queue:
+            cur_node = queue.pop(0)
+            next_nodes = graph[cur_node]
+            for next_node in next_nodes:
+                if not visited[next_node]:
+                    queue.append(next_node)
+                    visited[next_node] = True
+                    predecessors[next_node] = edges[cur_node]
+
+        
+        for v in edges:
+            cur_node = v
+            if v != start:
+                result[edges.index(v)].append(v)
+            while cur_node != start:
+                cur_node = predecessors[edges.index(cur_node)]
+                result[edges.index(v)].insert(0, cur_node)
+
+        result.remove([])
+        for l in result:
+            l.insert(0, f'{l[0]} para {l[-1]}: ' + str([x for x in l]))
+        return result
         
 class Req12:
     def __init__(self, vertex):
@@ -380,6 +425,8 @@ class Req12:
             edge.end = chr(v + 65)
             edge.weight = weight
             output.append(edge)
+        print('result:', result)
+        print('output:', output)
         return output
 #vizinhos = [[(1,6),(2,1),(3,5)], #0
 #            [(0,6),(2,2),(4,5)], #1

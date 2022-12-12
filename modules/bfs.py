@@ -1,3 +1,4 @@
+import types
 def extractMax(lista):
     m = lista.index(max(lista))
     lista[m] = 0
@@ -6,6 +7,7 @@ def extractMax(lista):
 
 class Grafo:
     def __init__(self, arestas, orientado=True):
+        self.arestas = arestas
         self.vertices = self.setVertices(arestas)
         self.numVertices = len(self.vertices)
         self.lista_adjacente = [[] for n in range(self.numVertices)]
@@ -101,7 +103,6 @@ class Grafo:
 class DFS:
     def __init__(self, grafo, inicio):
         n = grafo.numVertices
-        self.inicio = grafo.vertices.index(inicio)
         self.branco = 0
         self.cinza = 1
         self.preto = 2
@@ -112,6 +113,10 @@ class DFS:
         self.arestasClassificadas = []
         self.classificacaoArestas = []
         self.componentesFortes = []
+        if inicio == '':
+            self.inicio = 0
+        else:
+            self.inicio = grafo.vertices.index(inicio)
 
     def printClassificacaoArestas(self):
         print("================= printClassificacaoArestas =================")
@@ -139,15 +144,15 @@ class DFS:
 
     def printCiclo(self):
         result = []
-        if not self.ciclo:
+        if not self.grafo.ciclo:
             print("Não existe ciclo neste grafo!")
             return "Não existe ciclo neste grafo!"
 
         result.append("Existe ciclo neste grafo!")
-        result.append("Ciclos existentes:")
+        result.append("Existe ciclos entres os seguintes vértices: ")
         for ciclo in self.grafo.lista_ciclos:
-            result.append("" + self.grafo.vertices[ciclo[0]] + " - " +self.grafo.vertices[ciclo[1]])
-            print(f'{self.grafo.vertices[ciclo[0]]} - {self.grafo.vertices[ciclo[1]]}')
+            result.append(f'({self.grafo.vertices[ciclo[0]]}, {self.grafo.vertices[ciclo[1]]})')
+            print(f'({self.grafo.vertices[ciclo[0]]}, {self.grafo.vertices[ciclo[1]]})')
         return result
 
     def classificarAresta(self, cor, aresta, du, dv):
@@ -159,18 +164,31 @@ class DFS:
             else:
                 return "Cruzamento"
         else:
-            self.ciclo = True
-            if [aresta.v2, aresta.v1] not in self.grafo.lista_ciclos:
-                self.grafo.lista_ciclos.insert(-1, [aresta.v2, aresta.v1])
-            return "Retorno"
+            if self.grafo.orientado:
+                self.grafo.ciclo = True
+                if [aresta.v2, aresta.v1] not in self.grafo.lista_ciclos:
+                    self.grafo.lista_ciclos.insert(-1, [aresta.v2, aresta.v1])
+                return "Retorno"
+            
+            if str(aresta.v2)+str(aresta.v1) not in self.arestasClassificadas:
+                self.grafo.ciclo = True
+                if [aresta.v2, aresta.v1] not in self.grafo.lista_ciclos:
+                    self.grafo.lista_ciclos.insert(-1, [aresta.v2, aresta.v1])
+                return "Retorno"
 
     def ordemTopologica(self):
-        result = []
         terminos = self.t[:]
         ordemTerminos = [self.grafo.vertices[extractMax(
             terminos)] for _ in range(len(terminos))]
-        print(ordemTerminos)
-        return(ordemTerminos)
+        
+        output = []
+        for aresta in self.grafo.arestas:
+            edge = types.SimpleNamespace()
+            edge.start = aresta[0]
+            edge.end = aresta[1]
+            edge.weight = 0
+            output.append(edge)
+        return [output, ordemTerminos]
 
     def dfs(self):
         tempo = 0
@@ -178,7 +196,7 @@ class DFS:
         for u in range(0, self.grafo.numVertices):
             cor[u] = self.branco
             self.antecessor[u] = None
-
+        
         tempo = self.visitaDfs(self.inicio, tempo, cor)
         for u in range(self.grafo.numVertices):
             if cor[u] == self.branco:

@@ -75,6 +75,7 @@ def Soma(obj : Graph):
     grafo = Grafo(arestas, obj.oriented)
     for aresta in arestas:  # inserindo as arestas
         grafo.inserirAresta(grafo.vertices.index(aresta[0]), grafo.vertices.index(aresta[1]))
+
     buscaDFS = DFS(grafo, obj.selected_vertex)
     buscaDFS.dfs()
 
@@ -244,24 +245,9 @@ def Soma(obj : Graph):
         return {'result': output}
 
     if ( requisito == 11):
-        '''if (obj.weighted):
-            graf = []
-            for i in json_edjes:
-                if (i.start == "None" or i.start == "None"):
-                    print('Sem aresta a adicionar.')
-                else:
-                    graf.append((int(i.start), int(i.end), int(i.weight)))
-            print(graf)
-            output = adjacencia_lista.RF011Weighted(graf, int(obj.selected_vertex), int(obj.selected_vertex2))
-            return {"result": output}
-        else:
-            adjacencia_lista.RF011Noweighted(int(obj.selected_vertex), int(obj.selected_vertex2))
-            numericPath = adjacencia_lista.pathNoWeighted
-            print('aa: ', numericPath)
-            output = []
-            for i in numericPath:
-                output.append(chr(i + 65))
-            return {"result": output}'''
+        if not grafo.lista_adjacente[grafo.vertices.index(obj.selected_vertex)]:
+            return {"result": "O vértice inicial é um sumidouro, escolha outro vértice inicial!"}
+        
         result = ''
         for x in matriz.bfs(obj.selected_vertex, grafo.lista_adjacente, grafo.vertices):
             result += ' | ' + x[0]
@@ -269,15 +255,10 @@ def Soma(obj : Graph):
 
     if requisito == 12:
         graph_generator = GraphGenerator()
-
-        req12 = Req12(obj.size)
-
-        for i in json_edjes:
-            req12.add_edge(ord(i.start) - 65 , ord(i.end) - 65, i.weight)
         
         # create output object
         output = types.SimpleNamespace()
-        output.oriented = False
+        output.oriented = obj.weighted
         output.edges = matriz.prim(json_edjes, obj.selected_vertex, grafo.numVertices, grafo.vertices)[0]
 
         image_bytes = graph_generator.render_graph(output)
@@ -293,13 +274,28 @@ def Soma(obj : Graph):
         return {"result": result}
 
     if requisito == 15:
-        result = buscaDFS.ordemTopologica()
-        return {"result": result}
+        if obj.oriented and not grafo.ciclo:
+            result = buscaDFS.ordemTopologica()
+            graph_generator = GraphGenerator()
+
+            # create output object
+            output = types.SimpleNamespace()
+            output.oriented = True
+            output.edges = result[0]
+
+            image_bytes = graph_generator.render_graph_topology(result[1], output)
+            encoded_image = b64encode(image_bytes)
+
+            return {"data":encoded_image, "result": result[1]}
+        
+        return {"result": "Erro: O grafo possuí ciclo ou é não-orientado!!!"}
 
     if requisito == 16:
-        buscaDFS.dfsTransposta()
-        result = buscaDFS.printComponentesFortes()
-        return {"result": result}
+        if obj.oriented:
+            buscaDFS.dfsTransposta()
+            result = buscaDFS.printComponentesFortes()
+            return {"result": result}
+        return {"result": "Erro: O grafo o grafo não possuí orientação!!!"}
 
     if requisito == 17:
         result = matriz.dijkstra(matriz.adjMatrix, ord(obj.selected_vertex) - 65, grafo.numVertices)
@@ -308,14 +304,9 @@ def Soma(obj : Graph):
     if requisito == 18:
         graph_generator = GraphGenerator()
 
-        req12 = Req12(obj.size)
-
-        for i in json_edjes:
-            req12.add_edge(ord(i.start) - 65 , ord(i.end) - 65, i.weight)
-        
         # create output object
         output = types.SimpleNamespace()
-        output.oriented = False
+        output.oriented = obj.weighted
         output.edges = matriz.prim(json_edjes, obj.selected_vertex, grafo.numVertices, grafo.vertices)[0]
 
         image_bytes = graph_generator.render_graph(output)

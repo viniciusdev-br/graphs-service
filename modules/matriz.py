@@ -343,11 +343,13 @@ class Matriz(object):
         return [output, [custo_total, str(solucao)]]
     
     def bfs(self, start, graph, edges):
+        if not start:
+            start = edges[0]
         predecessors = [None for _ in range(len(edges))]
         result = [[] for _ in edges]
         queue = [edges.index(start)]
         visited = [False]*len(edges)
-        visited[0] = True
+        visited[edges.index(start)] = True
 
         while queue:
             cur_node = queue.pop(0)
@@ -358,7 +360,8 @@ class Matriz(object):
                     visited[next_node] = True
                     predecessors[next_node] = edges[cur_node]
 
-        
+        print(graph)
+        print(visited)
         for v in edges:
             cur_node = v
             if v != start:

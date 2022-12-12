@@ -72,7 +72,7 @@ def Soma(obj : Graph):
     arestas = []
     for i in json_edjes:
         arestas.append([i.start,i.end])
-    grafo = Grafo(arestas)
+    grafo = Grafo(arestas, obj.oriented)
     for aresta in arestas:  # inserindo as arestas
         grafo.inserirAresta(grafo.vertices.index(aresta[0]), grafo.vertices.index(aresta[1]))
     buscaDFS = DFS(grafo, obj.selected_vertex)
@@ -264,7 +264,7 @@ def Soma(obj : Graph):
             return {"result": output}'''
         result = ''
         for x in matriz.bfs(obj.selected_vertex, grafo.lista_adjacente, grafo.vertices):
-            result += str(x[0])
+            result += ' | ' + x[0]
         return {"result": result}
 
     if requisito == 12:
